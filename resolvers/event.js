@@ -12,10 +12,15 @@ mutation {
 module.exports = {
   events: () => {
     return Event.find()
+      .populate("creator")
       .then(events => {
         return events.map(event => ({
           ...event._doc,
-          _id: event._doc._id.toString()
+          _id: event._doc._id.toString(),
+          creator: {
+            ...event._doc.creator._doc,
+            _id: event._doc.creator._id.toString()
+          }
         }));
       })
       .catch(err => {
